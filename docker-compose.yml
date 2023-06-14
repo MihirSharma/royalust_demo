@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  royalust-server:
+    build:
+      context: ./royalust-server
+      dockerfile: Dockerfile
+    image: royalust-server
+    container_name: royalust-server
+    command: npm start
+    volumes:
+      - ./royalust-server/:/usr/app
+      - /usr/app/node_modules
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    env_file: ./royalust-server/.env
+    environment:
+      - NODE_ENV=development
+    networks:
+      - app-network
+  mongo:
+    image: mongo
+    volumes:
+      - data-volume:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+  royalust-interface:
+    build:
+      context: ./royalust-interface
+      dockerfile: Dockerfile
+    image: royalust-client
+    container_name: royalust-client
+    command: npm start
+    volumes:
+      - ./royalust-interface/:/usr/app
+      - /usr/app/node_modules
+    depends_on:
+      - royalust-server
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+    app-network:
+        driver: bridge
+
+volumes:
+    data-volume:
+    node_modules:
+    web-root:
+      driver: local

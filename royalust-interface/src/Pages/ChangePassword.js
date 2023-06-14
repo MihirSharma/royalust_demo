@@ -9,16 +9,28 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-const changePass = async (username, password, email, phone, props) => {
-	if (username && password && email && phone) {
-		let pass_hash = await generateHash(password);
-		let change_pass_res = await axios.put(`${config.server}/change_password`, {
-			username,
-			pass_hash,
-			email,
-			phone,
-		});
-		props.setChangePass(false);
+const changePass = async (
+	username,
+	password,
+	email,
+	phone,
+	props,
+	invalidPassword
+) => {
+	if (!invalidPassword) {
+		if (username && password && email && phone) {
+			let pass_hash = await generateHash(password);
+			let change_pass_res = await axios.put(
+				`${config.server}/change_password`,
+				{
+					username,
+					pass_hash,
+					email,
+					phone,
+				}
+			);
+			props.setChangePass(false);
+		}
 	}
 };
 
@@ -81,9 +93,13 @@ const ChangePassword = (props) => {
 						endAdornment: (
 							<InputAdornment position="end">
 								{showPassword ? (
-									<VisibilityOff onClick={handleClickShowPassword} />
+									<VisibilityOff
+										onClick={handleClickShowPassword}
+									/>
 								) : (
-									<Visibility onClick={handleClickShowPassword} />
+									<Visibility
+										onClick={handleClickShowPassword}
+									/>
 								)}
 							</InputAdornment>
 						),
@@ -105,12 +121,23 @@ const ChangePassword = (props) => {
 			<div style={{ marginTop: "2rem" }}>
 				<Button
 					variant="contained"
-					onClick={() => changePass(username, password, email, phone, props)}>
+					onClick={() =>
+						changePass(
+							username,
+							password,
+							email,
+							phone,
+							props,
+							invalidPassword
+						)
+					}>
 					Change Password
 				</Button>
 			</div>
 			<div style={{ marginTop: "1rem" }}>
-				<Button variant="contained" onClick={() => props.setChangePass(false)}>
+				<Button
+					variant="contained"
+					onClick={() => props.setChangePass(false)}>
 					Return to Login
 				</Button>
 			</div>

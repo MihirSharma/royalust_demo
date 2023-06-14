@@ -4,7 +4,8 @@
   "description": "royalust demo server",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "author": "MihirSharma",
   "license": "UNLICENSED",
@@ -18,5 +19,8 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.2.3",
     "passport": "^0.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
